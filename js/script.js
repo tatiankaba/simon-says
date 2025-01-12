@@ -1,7 +1,6 @@
-'use strict'
+'use strict';
 
-document.addEventListener('DOMContentLoaded', ()=> {
-
+document.addEventListener('DOMContentLoaded', () => {
   // game constants
 
   let errorCounter = 0;
@@ -9,7 +8,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
   let numberOfRounds = 5;
   let roundCounter = 1;
 
-  //сreate dom elements 
+  //сreate dom elements
 
   function createStartBtn() {
     const startBtn = document.createElement('button');
@@ -25,11 +24,11 @@ document.addEventListener('DOMContentLoaded', ()=> {
     newGameBtn.classList.add('new-game-btn');
     newGameBtn.textContent = 'new game';
 
-    newGameBtn.addEventListener('click', ()=> {
+    newGameBtn.addEventListener('click', () => {
       appendTo.innerHTML = '';
-      createStartWindow(appendTo, level)
-    })
-    return newGameBtn
+      createStartWindow(appendTo, level);
+    });
+    return newGameBtn;
   }
 
   function createRepeatTheSequency() {
@@ -45,7 +44,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     nextBtn.classList.add('btn');
     nextBtn.classList.add('next-btn');
     nextBtn.textContent = 'next';
-    return nextBtn
+    return nextBtn;
   }
 
   function createRoundInput() {
@@ -69,9 +68,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
     labelForSequencyInput.textContent = 'Your sequency:';
     const sequencyInput = document.createElement('input');
     sequencyInput.classList.add('sequency-input');
-    sequencyInput.type = 'text'
+    sequencyInput.type = 'text';
     sequencyInput.setAttribute('disabled', '');
-    labelForSequencyInput.setAttribute('for', 'sequency-input' )
+    labelForSequencyInput.setAttribute('for', 'sequency-input');
     sequencyInput.setAttribute('id', 'sequency-input');
     labelForSequencyInput.append(sequencyInput);
     return labelForSequencyInput;
@@ -140,7 +139,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
     return label;
   }
 
-
   function createGameContainer() {
     const body = document.querySelector('body');
     const gameContainer = document.createElement('div');
@@ -151,11 +149,16 @@ document.addEventListener('DOMContentLoaded', ()=> {
   function createFeedbackBlock() {
     const feedbackBlock = document.createElement('div');
     feedbackBlock.classList.add('feedback-block');
-    feedbackBlock.textContent = 'Press Start to launch the game'
-    return  feedbackBlock;
+    feedbackBlock.textContent = 'Press Start to launch the game';
+    return feedbackBlock;
   }
 
   //manipulate dom elements
+
+  function clearSequencyInput() {
+    const sequenceInput = document.querySelector('.sequency-input');
+    sequenceInput.value = '';
+  }
 
   function changeSequenceInput(clickedKey) {
     const sequenceInput = document.querySelector('.sequency-input');
@@ -174,14 +177,16 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
   function disableVirtualKeyboard() {
     const keys = Array.from(document.getElementsByClassName('key'));
-    keys.forEach((key)=> {
-      key.style.pointerEvents = 'none'});
+    keys.forEach((key) => {
+      key.style.pointerEvents = 'none';
+    });
   }
-  
+
   function enableVirtualKeyboard() {
     const keys = Array.from(document.getElementsByClassName('key'));
-    keys.forEach((key)=> {
-      key.style.pointerEvents = 'auto'});
+    keys.forEach((key) => {
+      key.style.pointerEvents = 'auto';
+    });
   }
 
   function disableRepeatTheSequencyBtn() {
@@ -194,238 +199,222 @@ document.addEventListener('DOMContentLoaded', ()=> {
     repeatBtn.disabled = false;
   }
 
-
-
   function checkChosenLevel() {
     const levelInput = document.querySelector('select');
     return levelInput.value;
-}
+  }
 
-function removeStartBtn() {
+  function removeStartBtn() {
     const startBtn = document.querySelector('.start-btn');
     startBtn.remove();
-}
+  }
 
-function listenLevelDropdownChange() {
-  const levelDropdown = document.querySelector('select')
-  levelDropdown.addEventListener('change', ()=> {
-    let chosenLevel = document.querySelector('select option:checked')
-    openLevel(chosenLevel);
+  function listenLevelDropdownChange() {
+    const levelDropdown = document.querySelector('select');
+    levelDropdown.addEventListener('change', () => {
+      let chosenLevel = document.querySelector('select option:checked');
+      openLevel(chosenLevel);
+    });
+  }
 
-  })
-}
-
- function changeFeedBackBlock(text) {
+  function changeFeedBackBlock(text) {
     const feedbackBlock = document.querySelector('.feedback-block');
     feedbackBlock.textContent = text;
-}
+  }
 
-function disableLevelDropdownList() {
-  const dropdownLevelList = document.querySelector('select');
-  dropdownLevelList.setAttribute('disabled', '')
-}
+  function disableLevelDropdownList() {
+    const dropdownLevelList = document.querySelector('select');
+    dropdownLevelList.setAttribute('disabled', '');
+  }
 
-function openLevel(level) {
-  const levelBlock = document.querySelector('.keyboard-container');
-  level = checkChosenLevel();
-      switch (level) {
-          case 'easy': 
-          levelBlock.innerHTML = '';
-          levelBlock.append(createVirtualNumberKeyboard());
-            break;
-          case 'medium':
-            levelBlock.innerHTML = '';
-            levelBlock.append(createVirtualLettersKeyboard());
-            break;
-          case 'hard':
-            levelBlock.innerHTML = '';
-            levelBlock.append(createVirtualNumberKeyboard());
-            levelBlock.append(createVirtualLettersKeyboard());
-            break;
+  function openLevel(level) {
+    const levelBlock = document.querySelector('.keyboard-container');
+    level = checkChosenLevel();
+    switch (level) {
+      case 'easy':
+        levelBlock.innerHTML = '';
+        levelBlock.append(createVirtualNumberKeyboard());
+        break;
+      case 'medium':
+        levelBlock.innerHTML = '';
+        levelBlock.append(createVirtualLettersKeyboard());
+        break;
+      case 'hard':
+        levelBlock.innerHTML = '';
+        levelBlock.append(createVirtualNumberKeyboard());
+        levelBlock.append(createVirtualLettersKeyboard());
+        break;
     }
-  };
+  }
 
   function renewRoundCounterInput(roundCounter) {
     const roundCounterInput = document.querySelector('.round-input');
     roundCounterInput.value = roundCounter;
   }
 
-// assemle main play page
+  // assemle main play page
 
+  function createStartWindow(appendTo, level) {
+    const startManageGameBlock = document.createElement('div');
+    startManageGameBlock.classList.add('game-manage-block');
 
-function createStartWindow(appendTo, level) {
-  const startManageGameBlock = document.createElement('div');
-  startManageGameBlock.classList.add('game-manage-block');
+    const startBtnBlock = document.createElement('div');
+    startBtnBlock.classList.add('start-btn-block');
 
-  const startBtnBlock = document.createElement('div');
-  startBtnBlock.classList.add('start-btn-block');
+    const startLevelsBlock = document.createElement('div');
+    startLevelsBlock.classList.add('start-levels-block');
 
-  const startLevelsBlock = document.createElement('div');
-  startLevelsBlock.classList.add('start-levels-block');
+    appendTo.append(startManageGameBlock);
+    startManageGameBlock.append(startBtnBlock);
+    startBtnBlock.append(createStartBtn());
+    startManageGameBlock.append(createLevelsDropdownList());
 
-  appendTo.append(startManageGameBlock);
-  startManageGameBlock.append(startBtnBlock)
-  startBtnBlock.append(createStartBtn());
-  startManageGameBlock.append(createLevelsDropdownList());
+    if (level !== 'easy') {
+      const dropdownLevelList = document.querySelector('select');
+      dropdownLevelList
+        .querySelector(`option[value = ${level}]`)
+        .setAttribute('selected', '');
+    }
 
-  if(level !== "easy") {
-    const dropdownLevelList = document.querySelector('select');
-    dropdownLevelList.querySelector(`option[value = ${level}]`).setAttribute('selected', '')
+    appendTo.append(startLevelsBlock);
+    startLevelsBlock.append(createFeedbackBlock());
+    startLevelsBlock.append(createSequencyInput());
+    startLevelsBlock.append(createVirtualKeyboardContainer());
 
+    openLevel(level);
+    listenLevelDropdownChange();
+
+    const startBtn = document.querySelector('.start-btn');
+    startBtn.addEventListener('click', () => {
+      changeFeedBackBlock('Simon says:');
+      removeStartBtn();
+      disableLevelDropdownList();
+      level = checkChosenLevel();
+      startBtnBlock.append(createNewGameBtn(appendTo, level));
+      startBtnBlock.append(createRepeatTheSequency());
+      startBtnBlock.append(createRoundInput());
+      pressCounter = 0;
+      errorCounter = 0;
+      roundCounter = 1;
+      startGame(roundCounter);
+    });
   }
 
-  appendTo.append(startLevelsBlock);
-  startLevelsBlock.append(createFeedbackBlock())
-  startLevelsBlock.append(createSequencyInput());
-  startLevelsBlock.append(createVirtualKeyboardContainer());
+  // laucnh game
 
-  openLevel(level);
-  listenLevelDropdownChange();
+  createGameContainer();
+  const gameContainer = document.querySelector('.container');
+  createStartWindow(gameContainer, 'easy');
 
-  const startBtn = document.querySelector('.start-btn');
-  startBtn.addEventListener('click', ()=> {
-    changeFeedBackBlock('Simon says:');
-    removeStartBtn();
-    disableLevelDropdownList();
-    level = checkChosenLevel();
-    startBtnBlock.append(createNewGameBtn(appendTo, level));
-    startBtnBlock.append(createRepeatTheSequency());
-    startBtnBlock.append(createRoundInput());
-    pressCounter = 0;
-    errorCounter = 0;
-    roundCounter = 1;
-    startGame(roundCounter);
-  });
-  };
+  // create round
 
+  async function startGame(roundCounter = '1') {
+    const sequency = await createSequency(roundCounter);
 
-// laucnh game 
-
-createGameContainer();
-const gameContainer = document.querySelector('.container');
-createStartWindow(gameContainer, 'easy');
-
-// create round
-
-async function startGame(roundCounter = '1') {
- 
-  const sequency = await createSequency(roundCounter);
-
-  const repeatSequency = async ()=> {
-    const repeatTheSequencyBtn = document.querySelector('.repeat-the-sequency-btn')
+    const repeatSequency = async () => {
+      pressCounter = 0;
+      errorCounter = 0;
+      clearSequencyInput();
+      const repeatTheSequencyBtn = document.querySelector(
+        '.repeat-the-sequency-btn',
+      );
       repeatTheSequencyBtn.disabled = true;
-      repeatTheSequencyBtn.classList.add('disabled')
+      repeatTheSequencyBtn.classList.add('disabled');
       await launchSequency(sequency);
-      disableRepeatTheSequencyBtn()
+      disableRepeatTheSequencyBtn();
       repeatTheSequencyBtn.removeEventListener('click', repeatSequency);
+    };
+    const repeatTheSequencyBtn = document.querySelector(
+      '.repeat-the-sequency-btn',
+    );
+    repeatTheSequencyBtn.addEventListener('click', repeatSequency);
+
+    await launchSequency(sequency);
+
+    let clickHandler = async (event) => {
+      await new Promise((resolve, reject) => {
+        if (event.target.classList.contains('key')) {
+          let clickedKey = event.target.textContent.toUpperCase();
+          compareClickedKeysWithSequency(sequency, clickedKey);
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    };
+    document
+      .querySelector('.keyboard-container')
+      .addEventListener('click', clickHandler);
+
+    if (roundCounter > numberOfRounds) {
+      changeFeedBackBlock('You won the game');
+    }
   }
-  const repeatTheSequencyBtn = document.querySelector('.repeat-the-sequency-btn')
-  repeatTheSequencyBtn.addEventListener('click', repeatSequency);
 
-  await launchSequency(sequency);
-
-  let clickHandler = async (event)=> {
-    await new Promise((resolve, reject) => {
-      if (event.target.classList.contains('key')) {
-        let clickedKey = event.target.textContent.toUpperCase();
-        compareClickedKeysWithSequency(sequency, clickedKey);
-        resolve()
-      } else {
-        reject()
-      }
-    })
-  }
-  document.querySelector('.keyboard-container').addEventListener('click', clickHandler);
-
-  if(roundCounter > numberOfRounds) {
-    changeFeedBackBlock('You won the game');
-  }
-}
-
-async function launchSequency(sequency) {
+  async function launchSequency(sequency) {
+    changeFeedBackBlock('Simon Says:')
     const keys = Array.from(document.getElementsByClassName('key'));
     disableVirtualKeyboard();
     disableRepeatTheSequencyBtn();
     disableNewGameBtn();
     for (let sign of sequency) {
       await new Promise((resolve) => {
-        const keyID = keys.findIndex(key => key.textContent.toUpperCase() === sign.toUpperCase()); 
-        setTimeout(()=>{
+        const keyID = keys.findIndex(
+          (key) => key.textContent.toUpperCase() === sign.toUpperCase(),
+        );
+        setTimeout(() => {
           if (keyID !== -1) {
             keys[keyID].classList.add('active');
             setTimeout(() => {
               keys[keyID].classList.remove('active');
-              resolve(); 
+              resolve();
             }, 3000);
           } else {
-            resolve(); 
-          };
-        }, 0)
+            resolve();
+          }
+        }, 1000);
       });
     }
     enableVirtualKeyboard();
     enableRepeatTheSequencyBtn();
     enableNewGameBtn();
     changeFeedBackBlock('your turn:');
-}
+  }
 
-
-function compareClickedKeysWithSequency(sequency, clickedKey){
-  if (clickedKey === sequency[pressCounter].toUpperCase()) {
-    pressCounter += 1;
-    changeFeedBackBlock('Continue:');
-    changeSequenceInput(clickedKey);
-    if(pressCounter === sequency.length) {
-      changeFeedBackBlock('you won the round');
-      renewRoundCounterInput(roundCounter+1);
-      //тут почитать требования добавить кнопку некст
-    }
-  } else {
-    errorCounter += 1;
-    changeFeedBackBlock('Mistake');
-    if(errorCounter > 1) {
-      changeFeedBackBlock('You lost the game');
-      'тут добавить то же самое'
+  function compareClickedKeysWithSequency(sequency, clickedKey) {
+    if (clickedKey === sequency[pressCounter].toUpperCase()) {
+      pressCounter += 1;
+      changeFeedBackBlock('Continue:');
+      changeSequenceInput(clickedKey);
+      if (pressCounter === sequency.length) {
+        changeFeedBackBlock('you won the round');
+        renewRoundCounterInput(roundCounter + 1);
+        //тут почитать требования добавить кнопку некст
+      }
+    } else {
+      errorCounter += 1;
+      changeFeedBackBlock('Mistake');
+      if (errorCounter > 1) {
+        changeFeedBackBlock('You lost the game');
+        ('тут добавить то же самое');
+      }
     }
   }
-}
 
-async function createSequency(roundCounter) {
-  return new Promise((resolve) => {
-    const sequenceArray = [];
-    const keys = Array.from(document.getElementsByClassName('key'));
-    let keysID;
-    let randomKeysID = [];
-    for(let i = 0; i < (roundCounter * 2); i++) {
-      keysID =  Math.floor(Math.random() * keys.length);
-      randomKeysID.push(keysID);
-    }
-    randomKeysID.forEach((ID) => {
-      sequenceArray.push(keys[ID].textContent);
-    })
-    resolve(sequenceArray);
-  })
-}
-
-
-
-
-
-
+  async function createSequency(roundCounter) {
+    return new Promise((resolve) => {
+      const sequenceArray = [];
+      const keys = Array.from(document.getElementsByClassName('key'));
+      let keysID;
+      let randomKeysID = [];
+      for (let i = 0; i < roundCounter * 2; i++) {
+        keysID = Math.floor(Math.random() * keys.length);
+        randomKeysID.push(keysID);
+      }
+      randomKeysID.forEach((ID) => {
+        sequenceArray.push(keys[ID].textContent);
+      });
+      resolve(sequenceArray);
+    });
+  }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
