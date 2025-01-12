@@ -8,6 +8,7 @@
   background-color: white;
   box-shadow: 1px 4px 0 darkgray;
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .btn:active {

@@ -1,29 +1,64 @@
-.label-for-roundInput {
-
+input {
+  border-radius: 15px;
+  border: 2px solid black;
 }
 
+.label-for-roundInput {
+  font-size: 26px;
+  margin-right: 10px;
+  text-align: center;
+  font-weight: 700;
+}
+
+
 .round-input {
-
-
+  width: 40px;
+  text-align: center;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+  margin-left: 10px;
 }
 
 .label-for-sequencyInput {
+  margin-top: 20px;
+  font-size: 26px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.sequency-input {
+  margin-top: 20px;
+  min-width: 150px;
+  text-align: center;
+  border-radius: 15px;
+  border: 2px solid black;
+  padding: 5px;
 
 }
 
 .label-for-levels {
-
+  font-size: 26px;
+  display: block;
+  text-align: center;
 }
 
-#level-list-label {
-
+select {
+  min-width: 150px;
+  text-align: center;
+  border-radius: 15px;
+  border: 2px solid black;
+  padding: 5px;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
-#level-list-label option {
-
+select:disabled {
+  color:black;
+  background-color: white;
+  pointer-events: none;
+  cursor: none;
 }
-
-#level-list-label option::selection {
-    color: blue;
-}
-
