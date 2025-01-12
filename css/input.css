@@ -1,0 +1,29 @@
+.label-for-roundInput {
+
+}
+
+.round-input {
+
+
+}
+
+.label-for-sequencyInput {
+
+}
+
+.label-for-levels {
+
+}
+
+#level-list-label {
+
+}
+
+#level-list-label option {
+
+}
+
+#level-list-label option::selection {
+    color: blue;
+}
+

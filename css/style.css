@@ -1,1 +1,12 @@
 @import 'button.css';
+@import 'input.css';
+@import 'keyboard.css';
+
+
+.container {
+    max-width: 980px;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+
