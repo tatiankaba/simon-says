@@ -11,19 +11,13 @@
   cursor: pointer;
 }
 
+
 .btn:active {
   box-shadow: none;
   transform: translateY(5px);
 }
 
-.start-btn {
-}
-
-.new-game-btn {
-}
-
-.repeat-the-sequency-btn {
-}
-
-.next-btn {
+.btn.disabled, .btn:disabled {
+  pointer-events: none;
+  cursor:none;
 }

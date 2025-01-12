@@ -26,9 +26,14 @@
     box-shadow: 1px 4px 0 darkgray;
     transition: 0.2s;
     text-align: center;
+    cursor: pointer;
 }
 
 .key:active {
     box-shadow: none;
     transform: translateY(5px);
+  }
+
+  .key.active, .key:active {
+    background-color: blue;
   }

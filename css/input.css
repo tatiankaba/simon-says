@@ -36,6 +36,7 @@ input {
   border-radius: 15px;
   border: 2px solid black;
   padding: 5px;
+  text-align: center;
 
 }
 
@@ -61,4 +62,8 @@ select:disabled {
   background-color: white;
   pointer-events: none;
   cursor: none;
+}
+
+.feedback-block {
+  text-transform: uppercase;
 }
