@@ -274,7 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     }
     document.addEventListener('keydown', preventDefaultHandler);
-    sequencyInput.addEventListener('keydown', preventDefaultHandler)
+    sequencyInput.addEventListener('keydown', preventDefaultHandler);
+    document.addEventListener('keyup', preventDefaultHandler);
+    sequencyInput.addEventListener('keyup', preventDefaultHandler)
   };
 
   function addEventListenerToKeys(clickHandler) {
@@ -329,6 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     openLevel(level);
     listenLevelDropdownChange();
+    disableVirtualKeyboard();
+    blockKeyboard();
 
     const startBtn = document.querySelector('.start-btn');
     startBtn.addEventListener('click', () => {
@@ -358,24 +362,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const sequency = await createSequency(roundCounter);
     pressCounter = 0;
     errorCounter = 0;
-
-    const repeatSequency = async () => {
-      pressCounter = 0;
-      errorCounter = 0;
-      clearSequencyInput();
-      const repeatTheSequencyBtn = document.querySelector(
-        '.repeat-the-sequency-btn',
-      );
-      repeatTheSequencyBtn.disabled = true;
-      repeatTheSequencyBtn.classList.add('disabled');
-      await launchSequency(sequency);
-      disableRepeatTheSequencyBtn();
-      repeatTheSequencyBtn.removeEventListener('click', repeatSequency);
-    };
     const repeatTheSequencyBtn = document.querySelector(
       '.repeat-the-sequency-btn',
     );
-    repeatTheSequencyBtn.addEventListener('click', repeatSequency);
+    let isKeyPressed = false;
+
+
+    const repeatSequency = async () => {
+        pressCounter = 0;
+        errorCounter = 0;
+        clearSequencyInput();
+        repeatTheSequencyBtn.disabled = true;
+        repeatTheSequencyBtn.classList.add('disabled');
+        disableRepeatTheSequencyBtn();
+        removeEventListenerToKeys(clickHandler);
+        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
+        repeatTheSequencyBtn.removeEventListener('click', repeatSequency);
+        await launchSequency(sequency);
+        addEventListenerToKeys(clickHandler);
+        addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
+        return Promise.resolve();
+    };
+ 
     // activity handlers
     let clickHandler = async (event) => {
       await new Promise((resolve) => {
@@ -388,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
       });
     };
-    let isKeyPressed = false;
       let keyDownHandler = (event) => {
         if (isKeyPressed) {
             event.preventDefault();
@@ -432,13 +439,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
       
-    let keyUpHandler = (event) => {
+    let keyUpHandler = () => {
         isKeyPressed = false;
       };
 
     await launchSequency(sequency);
     addEventListenerToKeys(clickHandler);
-    addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed)
+    addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
+    repeatTheSequencyBtn.addEventListener('click', repeatSequency);
+
 
   }
 
@@ -454,9 +463,7 @@ function highlightPressedKey(pressedKey) {
   }, 100)
 }
 
-
-
-  async function launchSequency(sequency) {
+async function launchSequency(sequency) {
     changeFeedBackBlock('Simon Says:')
     const keys = Array.from(document.getElementsByClassName('key'));
     disableVirtualKeyboard();
@@ -506,6 +513,9 @@ function highlightPressedKey(pressedKey) {
         disableVirtualKeyboard();
         blockKeyboard();
         disableRepeatTheSequencyBtn();
+        removeEventListenerToKeys(clickHandler);
+        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
+        return;
       }
     }
   }
