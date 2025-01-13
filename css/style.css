@@ -1,17 +1,14 @@
 @import 'button.css';
 @import 'input.css';
-@import 'keyboard.css';
+@import 'keyBoard.css';
 @import 'startPage.css';
 
-
 body {
-    background-color: aqua;
+  background-color: aqua;
 }
 
 .container {
-    max-width: 980px;
-    margin: 0 auto;
-    height: 100vh;
+  max-width: 980px;
+  margin: 0 auto;
+  height: 100vh;
 }
-
-
