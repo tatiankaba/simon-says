@@ -155,6 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //manipulate dom elements
 
+  function renewRoundCounterInput(roundCounter) {
+    const roundCounterInput = document.querySelector('.round-input');
+    roundCounterInput.value = roundCounter;
+  }
+
   function clearSequencyInput() {
     const sequenceInput = document.querySelector('.sequency-input');
     sequenceInput.value = '';
@@ -247,10 +252,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function renewRoundCounterInput(roundCounter) {
-    const roundCounterInput = document.querySelector('.round-input');
-    roundCounterInput.value = roundCounter;
+  function replaceRepeatBtnWithNextBtn() {
+    const repeatBtn = document.querySelector('.repeat-the-sequency-btn');
+    const btnContainer = document.querySelector('.start-btn-block');
+    btnContainer.replaceChild(createNextBtn(), repeatBtn)
   }
+
+  function replaceNextBtnWithRepeatBtn() {
+    const nextBtn = document.querySelector('.next-btn');
+    const btnContainer = document.querySelector('.start-btn-block');
+    btnContainer.replaceChild(createRepeatTheSequency(), nextBtn)
+  }
+
+  // work with event listeners
+
+  function blockKeyboard() {
+    const sequencyInput = document.querySelector(".sequency-input");
+    let preventDefaultHandler = (event) => {
+      if (/^[a-zA-Z0-9]$/.test(event.key)) {
+        event.preventDefault(); 
+    }
+    }
+    document.addEventListener('keydown', preventDefaultHandler);
+    sequencyInput.addEventListener('keydown', preventDefaultHandler)
+  };
+
+  function addEventListenerToKeys(clickHandler) {
+    const keyboardContainer = document.querySelector('.keyboard-container');
+    keyboardContainer.addEventListener('click', clickHandler); 
+  }
+
+  function removeEventListenerToKeys(clickHandler) {
+    const keyboardContainer = document.querySelector('.keyboard-container');
+    keyboardContainer.removeEventListener('click', clickHandler); 
+  }
+
+  function addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed) {
+    document.addEventListener('keydown', keyDownHandler); 
+    document.addEventListener('keyup', keyUpHandler); 
+  }
+
+  function removeEventListenerToKeyboard(keyDownHandler, keyUpHandler) {
+    document.removeEventListener('keydown', keyDownHandler); 
+    document.removeEventListener('keyup', keyUpHandler); 
+  }
+
 
   // assemle main play page
 
@@ -310,6 +356,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function startGame(roundCounter = '1') {
     const sequency = await createSequency(roundCounter);
+    pressCounter = 0;
+    errorCounter = 0;
 
     const repeatSequency = async () => {
       pressCounter = 0;
@@ -328,33 +376,91 @@ document.addEventListener('DOMContentLoaded', () => {
       '.repeat-the-sequency-btn',
     );
     repeatTheSequencyBtn.addEventListener('click', repeatSequency);
-
-    await launchSequency(sequency);
-
+    // activity handlers
     let clickHandler = async (event) => {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         if (event.target.classList.contains('key')) {
+          
           let clickedKey = event.target.textContent.toUpperCase();
-          compareClickedKeysWithSequency(sequency, clickedKey);
+          console.log(clickedKey)
+          compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler);
           resolve();
-        } else {
-          reject();
-        }
+        } 
       });
     };
-    document
-      .querySelector('.keyboard-container')
-      .addEventListener('click', clickHandler);
+    let isKeyPressed = false;
+      let keyDownHandler = (event) => {
+        if (isKeyPressed) {
+            event.preventDefault();
+            return;
+        };
+        let pressedKey;
+        let currentLevel = checkChosenLevel();
+        if(currentLevel === 'easy') {
+          isKeyPressed = true;
+          if (/^[0-9]$/.test(event.key)) {
+            pressedKey = event.key;
+          } else {
+            event.preventDefault();
+            return;
+          }
+        } else if (currentLevel === 'medium') {
+          isKeyPressed = true;
+          if (/^[a-zA-Z]$/.test(event.key)) {
+            pressedKey = event.key.toUpperCase();
+          } else {
+            event.preventDefault();
+            return;
+          }
+        } else if (currentLevel === 'hard'){
+          isKeyPressed = true;
+          if (/^[a-zA-Z0-9]$/.test(event.key)) {
+            pressedKey = event.key.toUpperCase();
+          } else {
+            event.preventDefault();
+            return;
+          }
+        } else {
+          event.preventDefault();
+          return;
+        }
+        highlightPressedKey(pressedKey)
+        compareClickedKeysWithSequency(sequency, pressedKey, clickHandler, keyDownHandler, keyUpHandler);
 
-    if (roundCounter > numberOfRounds) {
-      changeFeedBackBlock('You won the game');
-    }
+          
+      }
+
+
+      
+    let keyUpHandler = (event) => {
+        isKeyPressed = false;
+      };
+
+    await launchSequency(sequency);
+    addEventListenerToKeys(clickHandler);
+    addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed)
+
   }
+
+// round assemble functions
+
+function highlightPressedKey(pressedKey) {
+  console.log(pressedKey)
+  const keys = Array.from(document.getElementsByClassName('key'));
+  const keyID = keys.findIndex((key) => key.textContent === pressedKey);
+  keys[keyID].classList.add('active');
+  setTimeout(()=> {
+    keys[keyID].classList.remove('active');
+  }, 100)
+}
+
+
 
   async function launchSequency(sequency) {
     changeFeedBackBlock('Simon Says:')
     const keys = Array.from(document.getElementsByClassName('key'));
     disableVirtualKeyboard();
+    blockKeyboard();
     disableRepeatTheSequencyBtn();
     disableNewGameBtn();
     for (let sign of sequency) {
@@ -374,32 +480,60 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }, 1000);
       });
-    }
+    };
     enableVirtualKeyboard();
     enableRepeatTheSequencyBtn();
     enableNewGameBtn();
     changeFeedBackBlock('your turn:');
   }
 
-  function compareClickedKeysWithSequency(sequency, clickedKey) {
-    if (clickedKey === sequency[pressCounter].toUpperCase()) {
+  function compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler) {
+    changeSequenceInput(clickedKey);
+    if (clickedKey === sequency[pressCounter]) {
       pressCounter += 1;
       changeFeedBackBlock('Continue:');
-      changeSequenceInput(clickedKey);
       if (pressCounter === sequency.length) {
         changeFeedBackBlock('you won the round');
-        renewRoundCounterInput(roundCounter + 1);
-        //тут почитать требования добавить кнопку некст
+        removeEventListenerToKeys(clickHandler);
+        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
+        return startNewRound()
       }
     } else {
       errorCounter += 1;
       changeFeedBackBlock('Mistake');
       if (errorCounter > 1) {
         changeFeedBackBlock('You lost the game');
-        ('тут добавить то же самое');
+        disableVirtualKeyboard();
+        blockKeyboard();
+        disableRepeatTheSequencyBtn();
       }
     }
   }
+
+  function startNewRound() {
+    if(roundCounter === numberOfRounds) {
+      changeFeedBackBlock('you won the game');
+      disableVirtualKeyboard();
+      blockKeyboard();
+      disableRepeatTheSequencyBtn();
+      return;
+    }
+    disableVirtualKeyboard();
+    blockKeyboard();
+    replaceRepeatBtnWithNextBtn();
+    const nextBtn = document.querySelector('.next-btn');
+    nextBtn.addEventListener('click', ()=> {
+      roundCounter += 1;
+      renewRoundCounterInput(roundCounter);
+      replaceNextBtnWithRepeatBtn();
+      clearSequencyInput();
+      enableVirtualKeyboard();
+      startGame(roundCounter);
+    })
+    
+  }
+
+
 
   async function createSequency(roundCounter) {
     return new Promise((resolve) => {
