@@ -390,7 +390,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('key')) {
           
           let clickedKey = event.target.textContent.toUpperCase();
-          console.log(clickedKey)
           compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler);
           resolve();
         } 
@@ -454,7 +453,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // round assemble functions
 
 function highlightPressedKey(pressedKey) {
-  console.log(pressedKey)
   const keys = Array.from(document.getElementsByClassName('key'));
   const keyID = keys.findIndex((key) => key.textContent === pressedKey);
   keys[keyID].classList.add('active');
