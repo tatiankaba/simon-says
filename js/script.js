@@ -370,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const repeatSequency = async () => {
         pressCounter = 0;
-        errorCounter = 0;
         clearSequencyInput();
         repeatTheSequencyBtn.disabled = true;
         repeatTheSequencyBtn.classList.add('disabled');
