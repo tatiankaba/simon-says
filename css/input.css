@@ -67,3 +67,44 @@ select:disabled {
 .feedback-block {
   text-transform: uppercase;
 }
+
+@media screen and (max-width: 768px) {
+  .label-for-roundInput {
+    font-size: 16px;
+    margin-right: 10px;
+
+  }
+  
+  
+  .round-input {
+    width: 30px;
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .label-for-sequencyInput {
+    margin-top: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  .sequency-input {
+    margin-top: 10px;
+    min-width: 150px;
+    font-size: 16px;
+  }
+  
+  .label-for-levels {
+    font-size: 16px;
+
+  }
+  
+  select {
+    min-width: 120px;
+    font-size: 16px;
+    margin-left: 5px;
+  }
+
+}

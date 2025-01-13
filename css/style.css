@@ -4,11 +4,14 @@
 @import 'startPage.css';
 
 
+body {
+    background-color: aqua;
+}
+
 .container {
     max-width: 980px;
     margin: 0 auto;
     height: 100vh;
-    background-color: aqua;
 }
 
 

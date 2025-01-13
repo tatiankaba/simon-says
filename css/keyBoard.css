@@ -37,3 +37,16 @@
   .key.active, .key:active {
     background-color: blue;
   }
+
+  @media screen and (max-width: 768px) {
+    .keyboard-container {
+        margin-top: 10px;
+        padding: 10px 8px;
+    }
+    
+    .key {
+        min-width: 36px;
+        border-radius: 15px;
+        font-size: 16px;
+    }
+  }
