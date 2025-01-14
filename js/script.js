@@ -323,18 +323,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     appendTo.append(startLevelsBlock);
     startLevelsBlock.append(createFeedbackBlock());
-    startLevelsBlock.append(createSequencyInput());
     startLevelsBlock.append(createVirtualKeyboardContainer());
 
     openLevel(level);
     listenLevelDropdownChange();
     disableVirtualKeyboard();
-    blockKeyboard();
 
     const startBtn = document.querySelector('.start-btn');
     startBtn.addEventListener('click', () => {
       changeFeedBackBlock('Simon says:');
       removeStartBtn();
+      startLevelsBlock.prepend(createSequencyInput());
       disableLevelDropdownList();
       level = checkChosenLevel();
       startBtnBlock.append(createNewGameBtn());
@@ -356,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // create round
 
   async function startGame(roundCounter = '1') {
+
     const newGameBtn = document.querySelector('.new-game-btn');
     let currentLevel = checkChosenLevel();
 
