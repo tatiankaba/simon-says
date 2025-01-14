@@ -250,55 +250,57 @@ document.addEventListener('DOMContentLoaded', () => {
   function replaceRepeatBtnWithNextBtn() {
     const repeatBtn = document.querySelector('.repeat-the-sequency-btn');
     const btnContainer = document.querySelector('.start-btn-block');
-    btnContainer.replaceChild(createNextBtn(), repeatBtn)
+    btnContainer.replaceChild(createNextBtn(), repeatBtn);
   }
 
   function replaceNextBtnWithRepeatBtn() {
     const nextBtn = document.querySelector('.next-btn');
     const btnContainer = document.querySelector('.start-btn-block');
-    btnContainer.replaceChild(createRepeatTheSequency(), nextBtn)
+    btnContainer.replaceChild(createRepeatTheSequency(), nextBtn);
   }
 
   // work with event listeners
 
   function blockKeyboard() {
-    const sequencyInput = document.querySelector(".sequency-input");
+    const sequencyInput = document.querySelector('.sequency-input');
     let preventDefaultHandler = (event) => {
       if (/^[a-zA-Z0-9]$/.test(event.key)) {
-        event.preventDefault(); 
-    }
-    }
+        event.preventDefault();
+      }
+    };
     document.addEventListener('keydown', preventDefaultHandler);
     sequencyInput.addEventListener('keydown', preventDefaultHandler);
     document.addEventListener('keyup', preventDefaultHandler);
-    sequencyInput.addEventListener('keyup', preventDefaultHandler)
-  };
+    sequencyInput.addEventListener('keyup', preventDefaultHandler);
+  }
 
   function addEventListenerToKeys(clickHandler) {
     const keyboardContainer = document.querySelector('.keyboard-container');
-    keyboardContainer.addEventListener('click', clickHandler); 
+    keyboardContainer.addEventListener('click', clickHandler);
   }
 
   function removeEventListenerToKeys(clickHandler) {
     const keyboardContainer = document.querySelector('.keyboard-container');
-    keyboardContainer.removeEventListener('click', clickHandler); 
+    keyboardContainer.removeEventListener('click', clickHandler);
   }
 
-  function addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed) {
-    document.addEventListener('keydown', keyDownHandler); 
-    document.addEventListener('keyup', keyUpHandler); 
+  function addEventListenerToKeyboard(
+    keyDownHandler,
+    keyUpHandler,
+    isKeyPressed,
+  ) {
+    document.addEventListener('keydown', keyDownHandler);
+    document.addEventListener('keyup', keyUpHandler);
   }
 
   function removeEventListenerToKeyboard(keyDownHandler, keyUpHandler) {
-    document.removeEventListener('keydown', keyDownHandler); 
-    document.removeEventListener('keyup', keyUpHandler); 
+    document.removeEventListener('keydown', keyDownHandler);
+    document.removeEventListener('keyup', keyUpHandler);
   }
-
 
   // assemle main play page
 
   function createStartWindow(appendTo, level) {
-
     const startManageGameBlock = document.createElement('div');
     startManageGameBlock.classList.add('game-manage-block');
 
@@ -355,10 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // create round
 
   async function startGame(roundCounter = '1') {
-
     const newGameBtn = document.querySelector('.new-game-btn');
     let currentLevel = checkChosenLevel();
-
 
     newGameBtn.addEventListener('click', () => {
       gameContainer.innerHTML = '';
@@ -375,100 +375,104 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     let isKeyPressed = false;
 
-
     const repeatSequency = async () => {
-        pressCounter = 0;
-        clearSequencyInput();
-        repeatTheSequencyBtn.disabled = true;
-        repeatTheSequencyBtn.classList.add('disabled');
-        disableRepeatTheSequencyBtn();
-        removeEventListenerToKeys(clickHandler);
-        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
-        repeatTheSequencyBtn.removeEventListener('click', repeatSequency);
-        await launchSequency(sequency);
-        addEventListenerToKeys(clickHandler);
-        addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
-        return Promise.resolve();
+      pressCounter = 0;
+      clearSequencyInput();
+      repeatTheSequencyBtn.disabled = true;
+      repeatTheSequencyBtn.classList.add('disabled');
+      disableRepeatTheSequencyBtn();
+      removeEventListenerToKeys(clickHandler);
+      removeEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
+      repeatTheSequencyBtn.removeEventListener('click', repeatSequency);
+      await launchSequency(sequency);
+      addEventListenerToKeys(clickHandler);
+      addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
+      return Promise.resolve();
     };
- 
+
     // activity handlers
     let clickHandler = async (event) => {
       await new Promise((resolve) => {
         if (event.target.classList.contains('key')) {
-          
           let clickedKey = event.target.textContent.toUpperCase();
-          compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler);
+          compareClickedKeysWithSequency(
+            sequency,
+            clickedKey,
+            clickHandler,
+            keyDownHandler,
+            keyUpHandler,
+          );
           resolve();
-        } 
+        }
       });
     };
-      let keyDownHandler = (event) => {
-        if (isKeyPressed) {
-            event.preventDefault();
-            return;
-        };
-        let pressedKey;
-        if(currentLevel === 'easy') {
-          isKeyPressed = true;
-          if (/^[0-9]$/.test(event.key)) {
-            pressedKey = event.key;
-          } else {
-            event.preventDefault();
-            return;
-          }
-        } else if (currentLevel === 'medium') {
-          isKeyPressed = true;
-          if (/^[a-zA-Z]$/.test(event.key)) {
-            pressedKey = event.key.toUpperCase();
-          } else {
-            event.preventDefault();
-            return;
-          }
-        } else if (currentLevel === 'hard'){
-          isKeyPressed = true;
-          if (/^[a-zA-Z0-9]$/.test(event.key)) {
-            pressedKey = event.key.toUpperCase();
-          } else {
-            event.preventDefault();
-            return;
-          }
+    let keyDownHandler = (event) => {
+      if (isKeyPressed) {
+        event.preventDefault();
+        return;
+      }
+      let pressedKey;
+      if (currentLevel === 'easy') {
+        isKeyPressed = true;
+        if (/^[0-9]$/.test(event.key)) {
+          pressedKey = event.key;
         } else {
           event.preventDefault();
           return;
         }
-        highlightPressedKey(pressedKey)
-        compareClickedKeysWithSequency(sequency, pressedKey, clickHandler, keyDownHandler, keyUpHandler);
-
-          
+      } else if (currentLevel === 'medium') {
+        isKeyPressed = true;
+        if (/^[a-zA-Z]$/.test(event.key)) {
+          pressedKey = event.key.toUpperCase();
+        } else {
+          event.preventDefault();
+          return;
+        }
+      } else if (currentLevel === 'hard') {
+        isKeyPressed = true;
+        if (/^[a-zA-Z0-9]$/.test(event.key)) {
+          pressedKey = event.key.toUpperCase();
+        } else {
+          event.preventDefault();
+          return;
+        }
+      } else {
+        event.preventDefault();
+        return;
       }
+      highlightPressedKey(pressedKey);
+      compareClickedKeysWithSequency(
+        sequency,
+        pressedKey,
+        clickHandler,
+        keyDownHandler,
+        keyUpHandler,
+      );
+    };
 
-
-      
     let keyUpHandler = () => {
-        isKeyPressed = false;
-      };
+      isKeyPressed = false;
+    };
 
     await launchSequency(sequency);
     addEventListenerToKeys(clickHandler);
     addEventListenerToKeyboard(keyDownHandler, keyUpHandler, isKeyPressed);
     repeatTheSequencyBtn.addEventListener('click', repeatSequency);
-
-
   }
 
-// round assemble functions
+  // round assemble functions
 
-function highlightPressedKey(pressedKey) {
-  const keys = Array.from(document.getElementsByClassName('key'));
-  const keyID = keys.findIndex((key) => key.textContent === pressedKey);
-  keys[keyID].classList.add('active');
-  setTimeout(()=> {
-    keys[keyID].classList.remove('active');
-  }, 100)
-}
+  function highlightPressedKey(pressedKey) {
+    const keys = Array.from(document.getElementsByClassName('key'));
+    const keyID = keys.findIndex((key) => key.textContent === pressedKey);
+    keys[keyID].classList.add('active');
+    setTimeout(() => {
+      keys[keyID].classList.remove('active');
+    }, 100);
+  }
 
-async function launchSequency(sequency) {
-    changeFeedBackBlock('Simon Says:')
+  async function launchSequency(sequency) {
+    changeFeedBackBlock('Simon Says:');
     const keys = Array.from(document.getElementsByClassName('key'));
     disableVirtualKeyboard();
     blockKeyboard();
@@ -491,7 +495,7 @@ async function launchSequency(sequency) {
           }
         }, 1000);
       });
-    };
+    }
     console.log(sequency);
     enableVirtualKeyboard();
     enableRepeatTheSequencyBtn();
@@ -499,7 +503,13 @@ async function launchSequency(sequency) {
     changeFeedBackBlock('your turn:');
   }
 
-  async function compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler) {
+  async function compareClickedKeysWithSequency(
+    sequency,
+    clickedKey,
+    clickHandler,
+    keyDownHandler,
+    keyUpHandler,
+  ) {
     changeSequenceInput(clickedKey);
     if (clickedKey === sequency[pressCounter]) {
       pressCounter += 1;
@@ -508,7 +518,7 @@ async function launchSequency(sequency) {
         changeFeedBackBlock('you won the round');
         removeEventListenerToKeys(clickHandler);
         removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
-        return startNewRound()
+        return startNewRound();
       }
     } else {
       if (errorCounter >= 1) {
@@ -520,7 +530,7 @@ async function launchSequency(sequency) {
         removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
         return;
       } else {
-        const oneAction = async ()=> {
+        const oneAction = async () => {
           return new Promise((resolve) => {
             blockKeyboard();
             disableVirtualKeyboard();
@@ -529,22 +539,22 @@ async function launchSequency(sequency) {
             changeFeedBackBlock('Mistake');
             disableRepeatTheSequencyBtn();
             pressCounter = 0;
-            setTimeout(()=>{
+            setTimeout(() => {
               enableVirtualKeyboard();
               enableRepeatTheSequencyBtn();
-              addEventListenerToKeyboard(keyDownHandler, keyUpHandler)
+              addEventListenerToKeyboard(keyDownHandler, keyUpHandler);
               resolve();
-            }, 1000)
-        });
+            }, 1000);
+          });
+        };
+        await oneAction();
+        clearSequencyInput();
+        changeFeedBackBlock('Last try: ');
       }
-      await oneAction();
-      clearSequencyInput();
-      changeFeedBackBlock('Last try: ');
     }
   }
-  }
   function startNewRound() {
-    if(roundCounter === numberOfRounds) {
+    if (roundCounter === numberOfRounds) {
       changeFeedBackBlock('you won the game');
       disableVirtualKeyboard();
       blockKeyboard();
@@ -555,18 +565,15 @@ async function launchSequency(sequency) {
     blockKeyboard();
     replaceRepeatBtnWithNextBtn();
     const nextBtn = document.querySelector('.next-btn');
-    nextBtn.addEventListener('click', ()=> {
+    nextBtn.addEventListener('click', () => {
       roundCounter += 1;
       renewRoundCounterInput(roundCounter);
       replaceNextBtnWithRepeatBtn();
       clearSequencyInput();
       enableVirtualKeyboard();
       startGame(roundCounter);
-    })
-    
+    });
   }
-
-
 
   async function createSequency(roundCounter) {
     return new Promise((resolve) => {
