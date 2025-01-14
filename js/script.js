@@ -485,6 +485,7 @@ async function launchSequency(sequency) {
         }, 1000);
       });
     };
+    console.log(sequency);
     enableVirtualKeyboard();
     enableRepeatTheSequencyBtn();
     enableNewGameBtn();
