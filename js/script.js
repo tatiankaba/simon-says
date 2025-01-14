@@ -503,9 +503,7 @@ async function launchSequency(sequency) {
         return startNewRound()
       }
     } else {
-      errorCounter += 1;
-      changeFeedBackBlock('Mistake');
-      if (errorCounter > 1) {
+      if (errorCounter >= 1) {
         changeFeedBackBlock('You lost the game');
         disableVirtualKeyboard();
         blockKeyboard();
@@ -513,6 +511,14 @@ async function launchSequency(sequency) {
         removeEventListenerToKeys(clickHandler);
         removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
         return;
+      } else {
+        errorCounter += 1;
+        changeFeedBackBlock('Mistake');
+        pressCounter = 0;
+        disableVirtualKeyboard();
+        blockKeyboard();
+        removeEventListenerToKeys(clickHandler);
+        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
       }
     }
   }
