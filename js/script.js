@@ -229,18 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openLevel(level) {
     const levelBlock = document.querySelector('.keyboard-container');
+    while (levelBlock.firstChild) {
+      levelBlock.removeChild(levelBlock.firstChild);
+    }
     level = checkChosenLevel();
     switch (level) {
       case 'easy':
-        levelBlock.innerHTML = '';
         levelBlock.append(createVirtualNumberKeyboard());
         break;
       case 'medium':
-        levelBlock.innerHTML = '';
         levelBlock.append(createVirtualLettersKeyboard());
         break;
       case 'hard':
-        levelBlock.innerHTML = '';
         levelBlock.append(createVirtualNumberKeyboard());
         levelBlock.append(createVirtualLettersKeyboard());
         break;
@@ -284,10 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     keyboardContainer.removeEventListener('click', clickHandler);
   }
 
-  function addEventListenerToKeyboard(
-    keyDownHandler,
-    keyUpHandler,
-  ) {
+  function addEventListenerToKeyboard(keyDownHandler, keyUpHandler) {
     document.addEventListener('keydown', keyDownHandler);
     document.addEventListener('keyup', keyUpHandler);
   }
@@ -360,7 +357,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLevel = checkChosenLevel();
 
     newGameBtn.addEventListener('click', () => {
-      gameContainer.innerHTML = '';
+      while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+      }
       document.removeEventListener('keydown', keyDownHandler);
       document.removeEventListener('keydown', keyUpHandler);
       createStartWindow(gameContainer, currentLevel);
