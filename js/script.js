@@ -18,16 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return startBtn;
   }
 
-  function createNewGameBtn(appendTo, level) {
+  function createNewGameBtn() {
     const newGameBtn = document.createElement('button');
     newGameBtn.classList.add('btn');
     newGameBtn.classList.add('new-game-btn');
     newGameBtn.textContent = 'new game';
-
-    newGameBtn.addEventListener('click', () => {
-      appendTo.innerHTML = '';
-      createStartWindow(appendTo, level);
-    });
     return newGameBtn;
   }
 
@@ -303,6 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // assemle main play page
 
   function createStartWindow(appendTo, level) {
+
     const startManageGameBlock = document.createElement('div');
     startManageGameBlock.classList.add('game-manage-block');
 
@@ -340,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
       removeStartBtn();
       disableLevelDropdownList();
       level = checkChosenLevel();
-      startBtnBlock.append(createNewGameBtn(appendTo, level));
+      startBtnBlock.append(createNewGameBtn());
       startBtnBlock.append(createRepeatTheSequency());
       startBtnBlock.append(createRoundInput());
       pressCounter = 0;
@@ -359,6 +355,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // create round
 
   async function startGame(roundCounter = '1') {
+
+    const newGameBtn = document.querySelector('.new-game-btn');
+    let currentLevel = checkChosenLevel();
+
+
+    newGameBtn.addEventListener('click', () => {
+      gameContainer.innerHTML = '';
+      document.removeEventListener('keydown', keyDownHandler);
+      document.removeEventListener('keydown', keyUpHandler);
+      createStartWindow(gameContainer, currentLevel);
+    });
+
     const sequency = await createSequency(roundCounter);
     pressCounter = 0;
     errorCounter = 0;
@@ -400,7 +408,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         };
         let pressedKey;
-        let currentLevel = checkChosenLevel();
         if(currentLevel === 'easy') {
           isKeyPressed = true;
           if (/^[0-9]$/.test(event.key)) {
