@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let numberOfRounds = 5;
   let roundCounter = 1;
 
-  //сreate dom elements
+  //create dom elements
 
   function createStartBtn() {
     const startBtn = document.createElement('button');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return labelForRoundInput;
   }
 
-  function createSequencyInput(appendTo) {
+  function createSequencyInput() {
     const labelForSequencyInput = document.createElement('label');
     labelForSequencyInput.classList.add('label-for-sequencyInput');
     labelForSequencyInput.textContent = 'Your sequency:';
@@ -287,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function addEventListenerToKeyboard(
     keyDownHandler,
     keyUpHandler,
-    isKeyPressed,
   ) {
     document.addEventListener('keydown', keyDownHandler);
     document.addEventListener('keyup', keyUpHandler);
