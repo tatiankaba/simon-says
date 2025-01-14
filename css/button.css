@@ -20,4 +20,9 @@
 .btn.disabled, .btn:disabled {
   pointer-events: none;
   cursor:none;
+  color: gray;
+}
+
+.repeat-the-sequency-btn:disabled {
+  color: gray;
 }
