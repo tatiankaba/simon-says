@@ -492,7 +492,7 @@ async function launchSequency(sequency) {
     changeFeedBackBlock('your turn:');
   }
 
-  function compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler) {
+  async function compareClickedKeysWithSequency(sequency, clickedKey, clickHandler, keyDownHandler, keyUpHandler) {
     changeSequenceInput(clickedKey);
     if (clickedKey === sequency[pressCounter]) {
       pressCounter += 1;
@@ -513,17 +513,29 @@ async function launchSequency(sequency) {
         removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
         return;
       } else {
-        errorCounter += 1;
-        changeFeedBackBlock('Mistake');
-        pressCounter = 0;
-        disableVirtualKeyboard();
-        blockKeyboard();
-        removeEventListenerToKeys(clickHandler);
-        removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
+        const oneAction = async ()=> {
+          return new Promise((resolve) => {
+            blockKeyboard();
+            disableVirtualKeyboard();
+            removeEventListenerToKeyboard(keyDownHandler, keyUpHandler);
+            errorCounter += 1;
+            changeFeedBackBlock('Mistake');
+            disableRepeatTheSequencyBtn();
+            pressCounter = 0;
+            setTimeout(()=>{
+              enableVirtualKeyboard();
+              enableRepeatTheSequencyBtn();
+              addEventListenerToKeyboard(keyDownHandler, keyUpHandler)
+              resolve();
+            }, 1000)
+        });
       }
+      await oneAction();
+      clearSequencyInput();
+      changeFeedBackBlock('Last try:');
     }
   }
-
+  }
   function startNewRound() {
     if(roundCounter === numberOfRounds) {
       changeFeedBackBlock('you won the game');
