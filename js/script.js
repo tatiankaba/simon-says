@@ -236,13 +236,16 @@ document.addEventListener('DOMContentLoaded', () => {
     switch (level) {
       case 'easy':
         levelBlock.append(createVirtualNumberKeyboard());
+        disableVirtualKeyboard();
         break;
       case 'medium':
         levelBlock.append(createVirtualLettersKeyboard());
+        disableVirtualKeyboard();
         break;
       case 'hard':
         levelBlock.append(createVirtualNumberKeyboard());
         levelBlock.append(createVirtualLettersKeyboard());
+        disableVirtualKeyboard();
         break;
     }
   }
