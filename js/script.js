@@ -532,7 +532,7 @@ async function launchSequency(sequency) {
       }
       await oneAction();
       clearSequencyInput();
-      changeFeedBackBlock('Last try:');
+      changeFeedBackBlock('Last try: ');
     }
   }
   }
