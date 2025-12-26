@@ -41,7 +41,6 @@ Game flow:
 ---
 
 ## 🎨 Design Notes
-- Visual style inspired by **Squid Game**
 - Clear color contrast and button feedback
 - Minimalistic UI to keep focus on gameplay
 - Smooth visual transitions for sequence playback
